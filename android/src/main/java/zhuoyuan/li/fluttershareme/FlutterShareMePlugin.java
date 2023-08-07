@@ -92,7 +92,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
      */
     @Override
     public void onMethodCall(MethodCall call, @NonNull Result result) {
-        String url, msg, fileType;
+        String url, msg, fileType, appId;
         switch (call.method) {
             case _methodFaceBook:
                 url = call.argument("url");
@@ -131,7 +131,8 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
             case _methodInstagramShare:
                 msg = call.argument("url");
                 fileType = call.argument("fileType");
-                shareInstagramStory(msg, fileType, result);
+                appId = call.argument("appId");
+                shareInstagramStory(msg, fileType, appId, result);
                 break;
             case _methodTelegramShare:
                 msg = call.argument("msg");
@@ -343,7 +344,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
      * @param fileType type of file to share (image or video)
      * @param result   flutterResult
      */
-    private void shareInstagramStory(String url, String fileType, Result result) {
+    private void shareInstagramStory(String url, String fileType, String appId, Result result) {
         if (instagramInstalled()) {
             File file = new File(url);
             Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
@@ -353,6 +354,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 instagramIntent.setType("image/*");
             else if(fileType.equals("video"))
                 instagramIntent.setType("video/*");
+            instagramIntent.putExtra("source_application", appId);
             instagramIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
             instagramIntent.setPackage("com.instagram.android");
             try {

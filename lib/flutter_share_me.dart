@@ -161,9 +161,10 @@ class FlutterShareMe {
 
   ///share file to instagram
   Future<String?> shareToInstagram(
-      {required String filePath, FileType fileType = FileType.image}) async {
+      {required String filePath, FileType fileType = FileType.image, required String appId,}) async {
     final Map<String, dynamic> arguments = <String, dynamic>{};
     arguments.putIfAbsent('url', () => filePath);
+    arguments.putIfAbsent('appId', () => appId);
     if (fileType == FileType.image) {
       arguments.putIfAbsent('fileType', () => 'image');
     } else {
