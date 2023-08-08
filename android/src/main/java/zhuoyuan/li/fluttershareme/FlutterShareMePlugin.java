@@ -26,6 +26,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -50,6 +52,7 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
     final private static String _methodTwitter = "twitter_share";
     final private static String _methodSystemShare = "system_share";
     final private static String _methodInstagramShare = "instagram_share";
+    final private static String _methodInstagramShareMultiple = "instagram_share_multiple";
     final private static String _methodTelegramShare = "telegram_share";
 
 
@@ -133,6 +136,12 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 fileType = call.argument("fileType");
                 appId = call.argument("appId");
                 shareInstagramStory(msg, fileType, appId, result);
+                break;
+            case _methodInstagramShareMultiple:
+                List<String> files = call.argument("urls");
+                fileType = call.argument("fileType");
+                appId = call.argument("appId");
+                shareInstagramMultiple(files, fileType, appId, result);
                 break;
             case _methodTelegramShare:
                 msg = call.argument("msg");
@@ -356,6 +365,36 @@ public class FlutterShareMePlugin implements MethodCallHandler, FlutterPlugin, A
                 instagramIntent.setType("video/*");
             instagramIntent.putExtra("source_application", appId);
             instagramIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            instagramIntent.setPackage("com.instagram.android");
+            try {
+                activity.startActivity(instagramIntent);
+                result.success("Success");
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                result.success("Failure");
+            }
+        } else {
+            result.error("Instagram not found", "Instagram is not installed on device.", "");
+        }
+    }
+
+    private void shareInstagramMultiple(List<String> urls, String fileType, String appId, Result result) {
+        if (instagramInstalled()) {
+            ArrayList<Uri> fileUris = new ArrayList<>();
+            for (String url: urls) {
+
+                File file = new File(url);
+                Uri fileUri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file);
+                fileUris.add(fileUri);
+            }
+
+            Intent instagramIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+            if(fileType.equals("image"))
+                instagramIntent.setType("image/*");
+            else if(fileType.equals("video"))
+                instagramIntent.setType("video/*");
+            instagramIntent.putExtra("source_application", appId);
+            instagramIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, fileUris);
             instagramIntent.setPackage("com.instagram.android");
             try {
                 activity.startActivity(instagramIntent);
