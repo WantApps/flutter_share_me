@@ -145,6 +145,7 @@ class _MyAppState extends State<MyApp> {
         break;
       case Share.share_instagram:
         response = await flutterShareMe.shareToInstagram(
+            appId: 'appId',
             filePath: file!.path,
             fileType: videoEnable ? FileType.video : FileType.image);
         break;

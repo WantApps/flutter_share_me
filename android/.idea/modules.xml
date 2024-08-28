@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/flutter_share_me.iml" filepath="$PROJECT_DIR$/.idea/modules/flutter_share_me.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/flutter_share_me.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/flutter_share_me.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/flutter_share_me.main.iml" filepath="$PROJECT_DIR$/.idea/modules/flutter_share_me.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/flutter_share_me.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/flutter_share_me.unitTest.iml" />
     </modules>
   </component>
 </project>
