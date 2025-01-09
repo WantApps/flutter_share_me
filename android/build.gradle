@@ -23,7 +23,7 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-
+    namespace "zhuoyuan.li.fluttershareme"
     defaultConfig {
 
         compileSdk 28
@@ -32,6 +32,9 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
